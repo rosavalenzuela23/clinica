@@ -1,0 +1,6 @@
+@backend_clinica_HostAddress = http://localhost:5005
+
+GET {{backend_clinica_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
