@@ -1,3 +1,5 @@
 namespace backend_clinica.Domain;
 
-public class Comentario { }
+public class Comentario
+{
+}
