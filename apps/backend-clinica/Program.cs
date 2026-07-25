@@ -5,6 +5,7 @@ using backend_clinica.Persistence;
 using backend_clinica.Repositories;
 using backend_clinica.Services;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Text.Json.Serialization;
 
 public class Program
@@ -12,6 +13,17 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        var databaseConnection = new NpgsqlConnectionStringBuilder(
+            builder.Configuration.GetConnectionString("ClinicalDatabase"));
+        databaseConnection.Username = Environment.GetEnvironmentVariable("DB_USER") ?? databaseConnection.Username;
+        databaseConnection.Password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? databaseConnection.Password;
+        databaseConnection.Database = Environment.GetEnvironmentVariable("DB_NAME") ?? databaseConnection.Database;
+
+        if (int.TryParse(Environment.GetEnvironmentVariable("PORT"), out var port))
+        {
+            builder.WebHost.UseUrls($"http://localhost:{port}");
+        }
 
         // Add services to the container.
 
@@ -31,7 +43,7 @@ public class Program
             });
         });
         builder.Services.AddDbContext<ClinicalDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("ClinicalDatabase")));
+            options.UseNpgsql(databaseConnection.ConnectionString));
         builder.Services.AddScoped<PacienteRepository>();
         builder.Services.AddScoped<ExpedienteRepository>();
         builder.Services.AddScoped<SesionRepository>();

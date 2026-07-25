@@ -16,6 +16,7 @@
 
 - The .NET 10 API uses EF Core/Npgsql. Its model is in `apps/backend-clinica/Persistence/ClinicalDbContext.cs`, and schema changes require a checked-in migration in `Persistence/Migrations`.
 - The PostgreSQL connection string key is `ConnectionStrings:ClinicalDatabase` in `apps/backend-clinica/appsettings.json`.
+- Backend `dev` loads `apps/backend-clinica/.env` through `dotenv-cli`; set `DB_USER`, `DB_PASSWORD`, `DB_NAME`, and `PORT` there. The file is ignored by Git.
 - Swagger runs only in Development; launch profiles use `http://localhost:5005` and `https://localhost:7210`.
 - CORS permits only `http://localhost:4200`, while Vite has no configured development port. Align them before browser-based API integration.
 
